@@ -1,6 +1,9 @@
 Readme
 ======
 
+[Complete documentation](https://jmetancelin.github.io/ipython-batch-scheduler-magic/)
+
+
 Overview
 --------
 
