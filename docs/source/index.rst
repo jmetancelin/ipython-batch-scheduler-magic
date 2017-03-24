@@ -10,6 +10,14 @@ Welcome to ipython-batch-scheduler-magic's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   AUTHORS.md
+   README.md
+   modules
+
+List of wishes
+==============
+
+.. todolist::
 
 
 Indices and tables
