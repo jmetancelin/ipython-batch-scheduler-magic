@@ -1,0 +1,6 @@
+<map id="inheritancebf674b75d8" name="inheritancebf674b75d8">
+<area shape="rect" id="node1" href="#execute_batch_scheduler.backends.BaseMgr" target="_top" title="Abstract base class for description of workload manager interface." alt="" coords="5,55,317,80"/>
+<area shape="rect" id="node2" href="#execute_batch_scheduler.backends.BasicMgr" target="_top" title="Basic &#160;backend." alt="" coords="367,5,682,31"/>
+<area shape="rect" id="node3" href="#execute_batch_scheduler.backends.SSHMgr" target="_top" title="SSH based manager." alt="" coords="371,55,678,80"/>
+<area shape="rect" id="node4" href="#execute_batch_scheduler.backends.SlurmMgr" target="_top" title="Slurm workload manager." alt="" coords="365,104,684,129"/>
+</map>
