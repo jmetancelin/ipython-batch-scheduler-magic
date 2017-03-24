@@ -1,0 +1,10 @@
+"""Python package for workload scheduler execution cell magics and backend.
+
+Defines the default backend and some default command line arguments for this default backend.
+"""
+
+#: Default workload manager
+_DEFAULT_MGR = {default_manager}
+
+#: Default cell command line for default manager
+_DEFAULT_LINE_CMD_ARGS = {default_cmd_args}

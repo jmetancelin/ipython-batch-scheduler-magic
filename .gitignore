@@ -1,3 +1,7 @@
+# Generated on install __init__.py
+execute_batch_scheduler/__init__.py
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
