@@ -6,7 +6,7 @@ Overview
 
 This package provides a IPython [magic commands](http://ipython.readthedocs.io/en/stable/interactive/magics.html) to delegate cell content execution to a workload scheduler.
 
-Workload scheduler are mostly used in High Performance Computing environment to manage ressources usability to users. Currently, this package supports only [Slurm](http://slurm). It exists other schedulers, that contributors should feel free to add support:
+Workload scheduler are mostly used in High Performance Computing environment to manage resources usability to users. Currently, this package supports only [Slurm](http://slurm). It exists other schedulers, that contributors should feel free to add support:
 
 - [Slurm](http://slurm) (supported)
 - OAR
@@ -15,7 +15,7 @@ Workload scheduler are mostly used in High Performance Computing environment to 
 
 This package is also supporting basic SSH instead of workload scheduler.
 
-This package exposes functionnalities through a cell magic command : `%%execute`. Backend is provided in the `execute_cell` Python sub-package.
+This package exposes functionalities through a cell magic command : `%%execute`. Backend is provided in the `execute_batch_scheduler` Python sub-package.
 
 
 Installation
@@ -40,7 +40,7 @@ Example for setting a specific slurm QOS and a host for ssh:
 
 The magic command is then activated as an IPython extension:
 
-    In [1]: %load_ext execute_cell_extension
+    In [1]: %load_ext execute_batch_scheduler.execute_magic
 
 Usage example
 -------------
@@ -48,21 +48,28 @@ Usage example
 A single entry point is the `%%execute` magic:
 
 ```text
-In [2]: %%execute -n8 -N1
+In [2]: %%execute -n8 -N4
 srun -n 8 hostname
 ...:
 Submitted batch job 957969
 Running .
 End batch job 957969 Status:  COMPLETED
 
-romeo141
+romeo137
+romeo137
+romeo138
+romeo138
+romeo139
+romeo139
+romeo140
+romeo140
 ```
 
-Command line arguments (`-n8 -N1` in the example above) are passed to the workload manager submission command, `salloc` here for Slurm. Some command line arguments are reserved, and intercepted, by the magic command. See below
+Command line arguments (`-n8 -N4` in the example above) are passed to the workload manager submission command, `salloc` here for Slurm. Some command line arguments are reserved, and intercepted, by the magic command. See below
 
 #### Common arguments:
 
-- `--wlm=<backend>` : select the backend workload manager (currently available: 'ssh', 'slurm'). Default value is set at install.
+- `--wlm=<backend>` : select the backend workload manager (currently available: `ssh`, `slurm`). Default value is set at install.
 - `--shell=<SHELL>` : shell to use as a script shebang `!#SHELL`. Default value is `/bin/bash`
 - `--bg` : run the cell content in background. No output will be printed for this cell.
 - `--amgr=<VAR>` : variable in user namespace to store backend object. Only way to get cell output when used with `--bg`.
@@ -70,7 +77,7 @@ Command line arguments (`-n8 -N1` in the example above) are passed to the worklo
 
 ### SSH example
 
-SSH backend is not a workload manager but simply use ssh to reach executing resources. The ssh is not taking any standard imput from user so it must connect without password or passphrase.
+SSH backend is not a workload manager but simply use ssh to reach executing resources. The ssh is not taking any standard input from user so it must connect without password or passphrase.
 
 Specific arguments:
 
