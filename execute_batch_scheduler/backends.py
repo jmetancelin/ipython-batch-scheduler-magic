@@ -50,7 +50,6 @@ class BaseMgr(object, metaclass=ABCMeta):
             Shell to use whithin the workload scheduler
 
         """
-        print("CREATE backend with : " + ' '.join(args))
         self._waiting_steps = 0
         self._running_steps = 0
         self.shebang = ("#!{0} \n".format(shell)).encode('utf8', 'replace')
@@ -339,6 +338,8 @@ class SlurmMgr(BaseMgr):
         """
         super(SlurmMgr, self).__init__(args, shell)
         self.cmd = self._wlbin + args
+        self._is_started = False
+        self._is_terminated = False
 
         # Build Popen instance
         try:
@@ -369,7 +370,6 @@ class SlurmMgr(BaseMgr):
             Submission command standard errput.
 
         """
-        self._is_terminated = False
         script = self.shebang
         script += content.encode('utf8', 'replace')
         if not script.endswith(b'\n'):
@@ -385,6 +385,10 @@ class SlurmMgr(BaseMgr):
         self._jobid = 0
         if out.find("Submitted batch job") == 0:
             self._jobid = int(out.split(' ')[-1])
+            self._is_started = True
+        else:
+            sys.stderr.write("Error during job submission\n")
+            self._is_terminated = True
         return (out, err)
 
     def _get_job_state(self):
@@ -405,31 +409,32 @@ class SlurmMgr(BaseMgr):
         slient : bool (default=False)
             Display or not a progression state.
         """
-        jobstate = self._get_job_state()
-        try:
-            while all([jobstate.find(s) < 0 for s in self._end_states]):
-                if any([jobstate.find(s) >= 0 for s in self._wait_states]):
-                    self._step_waiting(silent=silent)
-                if any([jobstate.find(s) >= 0 for s in self._run_states]):
-                    if(self._waiting_steps > 0 and self._running_steps == 0):
-                        if not silent:
-                            sys.stdout.write("\n")
-                    self._step_running(silent=silent)
-                jobstate = self._get_job_state()
-        except KeyboardInterrupt:
-            sys.stdout.write("Terminate job {0} \n".format(self._jobid))
-            sys.stdout.flush()
-            check_call((['scancel', str(self._jobid)]))
-            time.sleep(1)
+        if self._is_started:
             jobstate = self._get_job_state()
-        self._is_terminated = True
+            try:
+                while all([jobstate.find(s) < 0 for s in self._end_states]):
+                    if any([jobstate.find(s) >= 0 for s in self._wait_states]):
+                        self._step_waiting(silent=silent)
+                    if any([jobstate.find(s) >= 0 for s in self._run_states]):
+                        if(self._waiting_steps > 0 and self._running_steps == 0):
+                            if not silent:
+                                sys.stdout.write("\n")
+                        self._step_running(silent=silent)
+                    jobstate = self._get_job_state()
+            except KeyboardInterrupt:
+                sys.stdout.write("Terminate job {0} \n".format(self._jobid))
+                sys.stdout.flush()
+                check_call((['scancel', str(self._jobid)]))
+                time.sleep(1)
+                jobstate = self._get_job_state()
+            self._is_terminated = True
 
-        if not silent:
-            if(self._waiting_steps > 0 or self._running_steps > 0):
-                sys.stdout.write("\n")
-            sys.stdout.write("End batch job {0} Status: {1}\n".format(
-                self._jobid, jobstate))
-            sys.stdout.flush()
+            if not silent:
+                if(self._waiting_steps > 0 or self._running_steps > 0):
+                    sys.stdout.write("\n")
+                sys.stdout.write("End batch job {0} Status: {1}\n".format(
+                    self._jobid, jobstate))
+                sys.stdout.flush()
 
     def get_output(self):
         """Get the job output and error.
@@ -443,9 +448,9 @@ class SlurmMgr(BaseMgr):
         stderr: str
             Job standard errput read from slurm error file.
         """
-        if self._is_terminated:
-            if not self._get_job_state() == 'COMPLETED':
-                sys.stderr.write(' '.join(self.cmd))
+        if self._is_started and self._is_terminated:
+            if self._get_job_state().find('COMPLETED') < 0:
+                sys.stderr.write("Slurm command was : " + " ".join(self.cmd) + "\n")
                 sys.stderr.flush()
             job_f = self._outerr_files.replace('%J', str(self._jobid))
             job_out_f = job_f + '.out'
@@ -468,4 +473,4 @@ class SlurmMgr(BaseMgr):
                 self.out, self.err = job_out, job_err
             return(self.out, self.err)
         else:
-            return None
+            return(None, None)
