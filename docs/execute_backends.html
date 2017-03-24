@@ -1,0 +1,518 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>execute_batch_scheduler.backends module &#8212; ipython-batch-scheduler-magic 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="execute_batch_scheduler package" href="execute_batch_scheduler.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="execute_batch_scheduler.html" title="execute_batch_scheduler package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">ipython-batch-scheduler-magic modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-execute_batch_scheduler.backends">
+<span id="execute-batch-scheduler-backends-module"></span><h1>execute_batch_scheduler.backends module<a class="headerlink" href="#module-execute_batch_scheduler.backends" title="Permalink to this headline">¶</a></h1>
+<p>Different workload manager interface for cell execution magics.</p>
+<p>List of defined class:</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr" title="execute_batch_scheduler.backends.BaseMgr"><code class="xref py py-class docutils literal"><span class="pre">BaseMgr</span></code></a> : Abstract class for functionnal specifications</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#execute_batch_scheduler.backends.BasicMgr" title="execute_batch_scheduler.backends.BasicMgr"><code class="xref py py-class docutils literal"><span class="pre">BasicMgr</span></code></a> : Simple bash execution (testing purposes). One should use <code class="docutils literal"><span class="pre">%%script</span> <span class="pre">bash</span></code> or <code class="docutils literal"><span class="pre">%%bash</span></code> magics instead</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#execute_batch_scheduler.backends.SSHMgr" title="execute_batch_scheduler.backends.SSHMgr"><code class="xref py py-class docutils literal"><span class="pre">SSHMgr</span></code></a> : Execute cell content through SSH on a distant machine.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#execute_batch_scheduler.backends.SlurmMgr" title="execute_batch_scheduler.backends.SlurmMgr"><code class="xref py py-class docutils literal"><span class="pre">SlurmMgr</span></code></a> : Execute cell content as a Slurm job</p>
+<blockquote>
+<div><img src="_images/inheritance-54678091a06492947c7e6c7ceb525c88b13f9524.png" alt="Inheritance diagram of execute_batch_scheduler.backends" usemap="#inheritancebf674b75d8" class="inheritance"/>
+<map id="inheritancebf674b75d8" name="inheritancebf674b75d8">
+<area shape="rect" id="node1" href="#execute_batch_scheduler.backends.BaseMgr" target="_top" title="Abstract base class for description of workload manager interface." alt="" coords="5,55,317,80"/>
+<area shape="rect" id="node2" href="#execute_batch_scheduler.backends.BasicMgr" target="_top" title="Basic &#160;backend." alt="" coords="367,5,682,31"/>
+<area shape="rect" id="node3" href="#execute_batch_scheduler.backends.SSHMgr" target="_top" title="SSH based manager." alt="" coords="371,55,678,80"/>
+<area shape="rect" id="node4" href="#execute_batch_scheduler.backends.SlurmMgr" target="_top" title="Slurm workload manager." alt="" coords="365,104,684,129"/>
+</map>
+</div></blockquote>
+</li>
+</ul>
+<dl class="class">
+<dt id="execute_batch_scheduler.backends.BaseMgr">
+<em class="property">class </em><code class="descclassname">execute_batch_scheduler.backends.</code><code class="descname">BaseMgr</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BaseMgr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstract base class for description of workload manager interface.</p>
+<p>Any derived class must implement the init function, how to submit
+a cell, how to monitor job progression and how to get output from
+execution.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr.get_output" title="execute_batch_scheduler.backends.BaseMgr.get_output"><code class="xref py py-obj docutils literal"><span class="pre">get_output</span></code></a>()</td>
+<td>Get the job output and error.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr.submit" title="execute_batch_scheduler.backends.BaseMgr.submit"><code class="xref py py-obj docutils literal"><span class="pre">submit</span></code></a>(content)</td>
+<td>Submission of the cell content to the workload manager.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr.wait_progress" title="execute_batch_scheduler.backends.BaseMgr.wait_progress"><code class="xref py py-obj docutils literal"><span class="pre">wait_progress</span></code></a>()</td>
+<td>Interact with workload manager to notify job progression and states.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BaseMgr.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BaseMgr.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the workload manager interface.</p>
+<p>Derived class should instanciate a <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.Popen" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> object to interact with.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>args</strong> : str</p>
+<blockquote>
+<div><p>String containing workload scheduler specific arguments.</p>
+</div></blockquote>
+<p><strong>shell</strong> : str</p>
+<blockquote class="last">
+<div><p>Shell to use whithin the workload scheduler</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BaseMgr.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BaseMgr.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the job output and error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">stdout: str</p>
+<blockquote>
+<div><p>Job standard output</p>
+</div></blockquote>
+<p>stderr: str</p>
+<blockquote class="last">
+<div><p>Job standard errput</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BaseMgr.submit">
+<code class="descname">submit</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BaseMgr.submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submission of the cell content to the workload manager.</p>
+<p>Use a <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.Popen" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> instance to comunicate cell content.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>content: str</strong></p>
+<blockquote class="last">
+<div><p>IPython cell content.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BaseMgr.wait_progress">
+<code class="descname">wait_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BaseMgr.wait_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interact with workload manager to notify job
+progression and states.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="execute_batch_scheduler.backends.BasicMgr">
+<em class="property">class </em><code class="descclassname">execute_batch_scheduler.backends.</code><code class="descname">BasicMgr</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BasicMgr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr" title="execute_batch_scheduler.backends.BaseMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.BaseMgr</span></code></a></p>
+<p>Basic  backend.</p>
+<p>Use a simple bash execution for testing purposes.
+This is not a replacement of the builtin IPython <code class="docutils literal"><span class="pre">%%bash</span></code> magics</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BasicMgr.get_output" title="execute_batch_scheduler.backends.BasicMgr.get_output"><code class="xref py py-obj docutils literal"><span class="pre">get_output</span></code></a>()</td>
+<td>Skip ouptut.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BasicMgr.submit" title="execute_batch_scheduler.backends.BasicMgr.submit"><code class="xref py py-obj docutils literal"><span class="pre">submit</span></code></a>(content)</td>
+<td>Submit the cell content to the Popen instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.BasicMgr.wait_progress" title="execute_batch_scheduler.backends.BasicMgr.wait_progress"><code class="xref py py-obj docutils literal"><span class="pre">wait_progress</span></code></a>()</td>
+<td>Skip progression.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BasicMgr.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BasicMgr.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the default manager</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BasicMgr.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BasicMgr.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip ouptut. Cell output already displayed on submit</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BasicMgr.submit">
+<code class="descname">submit</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BasicMgr.submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submit the cell content to the Popen instance.
+Return the output and error.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.BasicMgr.wait_progress">
+<code class="descname">wait_progress</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.BasicMgr.wait_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip progression. Cell already executed on submit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="execute_batch_scheduler.backends.SSHMgr">
+<em class="property">class </em><code class="descclassname">execute_batch_scheduler.backends.</code><code class="descname">SSHMgr</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SSHMgr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr" title="execute_batch_scheduler.backends.BaseMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.BaseMgr</span></code></a></p>
+<p>SSH based manager.</p>
+<p>Reach a distant machine through SSH to execute cell content as a script.
+SSH is running in batch mode without standard input interaction with
+user, so it must connect without password or passphrase.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SSHMgr.get_output" title="execute_batch_scheduler.backends.SSHMgr.get_output"><code class="xref py py-obj docutils literal"><span class="pre">get_output</span></code></a>()</td>
+<td>Get job output</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SSHMgr.submit" title="execute_batch_scheduler.backends.SSHMgr.submit"><code class="xref py py-obj docutils literal"><span class="pre">submit</span></code></a>(content)</td>
+<td>Submit the cell content to the Popen instance.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SSHMgr.wait_progress" title="execute_batch_scheduler.backends.SSHMgr.wait_progress"><code class="xref py py-obj docutils literal"><span class="pre">wait_progress</span></code></a>([silent])</td>
+<td>Wait for progression.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SSHMgr.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SSHMgr.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the workload manager interface for SSH.</p>
+<p>It rely on <code class="docutils literal"><span class="pre">ssh</span> <span class="pre">-n</span></code> so ssh must connect without any password
+and passphrase. The ssh command is achieved through a <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.Popen" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>args</strong> : str</p>
+<blockquote>
+<div><p>String containing workload scheduler specific arguments.</p>
+</div></blockquote>
+<p><strong>shell</strong> : str</p>
+<blockquote class="last">
+<div><p>Shell to use whithin the workload scheduler</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SSHMgr.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SSHMgr.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get job output</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">stdout: str</p>
+<blockquote>
+<div><p>Job standard output</p>
+</div></blockquote>
+<p>stderr: str</p>
+<blockquote class="last">
+<div><p>Job standard errput</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SSHMgr.submit">
+<code class="descname">submit</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SSHMgr.submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submit the cell content to the Popen instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>content: str</strong></p>
+<blockquote class="last">
+<div><p>IPython cell content.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SSHMgr.wait_progress">
+<code class="descname">wait_progress</code><span class="sig-paren">(</span><em>silent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SSHMgr.wait_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait for progression.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>slient</strong> : bool (default=False)</p>
+<blockquote class="last">
+<div><p>Display or not a progression state.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="execute_batch_scheduler.backends.SlurmMgr">
+<em class="property">class </em><code class="descclassname">execute_batch_scheduler.backends.</code><code class="descname">SlurmMgr</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SlurmMgr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#execute_batch_scheduler.backends.BaseMgr" title="execute_batch_scheduler.backends.BaseMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.BaseMgr</span></code></a></p>
+<p>Slurm workload manager.</p>
+<p>It enforces the slurm standard output and error files to be read and
+display in Cell output after completion.</p>
+<p>Slurm output and error files are stored in <code class="docutils literal"><span class="pre">$HOME/python-execute-slurm.${SLURM_JOB_ID}.[out|err]</span></code>.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<p class="last">Add a way to change out/err slurm files location.</p>
+</div>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SlurmMgr.get_output" title="execute_batch_scheduler.backends.SlurmMgr.get_output"><code class="xref py py-obj docutils literal"><span class="pre">get_output</span></code></a>()</td>
+<td>Get the job output and error.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SlurmMgr.submit" title="execute_batch_scheduler.backends.SlurmMgr.submit"><code class="xref py py-obj docutils literal"><span class="pre">submit</span></code></a>(content)</td>
+<td>Submission of the cell content to the workload manager.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.backends.SlurmMgr.wait_progress" title="execute_batch_scheduler.backends.SlurmMgr.wait_progress"><code class="xref py py-obj docutils literal"><span class="pre">wait_progress</span></code></a>([silent])</td>
+<td>Interact with workload manager to notify job</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SlurmMgr.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>args</em>, <em>shell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SlurmMgr.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the slurm submission.</p>
+<p>The <code class="docutils literal"><span class="pre">sbatch</span></code> command is achieved through a <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.Popen" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">subprocess.Popen</span></code></a> object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>args</strong> : str</p>
+<blockquote>
+<div><p>String containing workload scheduler specific arguments.</p>
+</div></blockquote>
+<p><strong>shell</strong> : str</p>
+<blockquote class="last">
+<div><p>Shell to use whithin the workload scheduler</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SlurmMgr.get_output">
+<code class="descname">get_output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SlurmMgr.get_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the job output and error.</p>
+<p>Read slurm standard and output files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">stdout: str</p>
+<blockquote>
+<div><p>Job standard output read from slurm output file.</p>
+</div></blockquote>
+<p>stderr: str</p>
+<blockquote class="last">
+<div><p>Job standard errput read from slurm error file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SlurmMgr.submit">
+<code class="descname">submit</code><span class="sig-paren">(</span><em>content</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SlurmMgr.submit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Submission of the cell content to the workload manager.</p>
+<p>Use a Popen instance.
+Return the output and error of submission.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>content: str</strong></p>
+<blockquote>
+<div><p>IPython cell content.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">stdout: str</p>
+<blockquote>
+<div><p>Submission command standard output.</p>
+</div></blockquote>
+<p>stderr: str</p>
+<blockquote class="last">
+<div><p>Submission command standard errput.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="execute_batch_scheduler.backends.SlurmMgr.wait_progress">
+<code class="descname">wait_progress</code><span class="sig-paren">(</span><em>silent=False</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.backends.SlurmMgr.wait_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interact with workload manager to notify job
+progression and states</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>slient</strong> : bool (default=False)</p>
+<blockquote class="last">
+<div><p>Display or not a progression state.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="execute_batch_scheduler.html"
+                        title="previous chapter">execute_batch_scheduler package</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/execute_backends.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="execute_batch_scheduler.html" title="execute_batch_scheduler package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >ipython-batch-scheduler-magic modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Jean-Matthieu Etancelin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>

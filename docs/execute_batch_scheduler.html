@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>execute_batch_scheduler package &#8212; ipython-batch-scheduler-magic 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="execute_batch_scheduler.backends module" href="execute_backends.html" />
+    <link rel="prev" title="ipython-batch-scheduler-magic modules" href="modules.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="execute_backends.html" title="execute_batch_scheduler.backends module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="ipython-batch-scheduler-magic modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">ipython-batch-scheduler-magic modules</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="execute-batch-scheduler-package">
+<h1>execute_batch_scheduler package<a class="headerlink" href="#execute-batch-scheduler-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-execute_batch_scheduler">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-execute_batch_scheduler" title="Permalink to this headline">¶</a></h2>
+<p>Python package for workload scheduler execution cell magics and backend.</p>
+<p>Defines the default backend and some default command line arguments for this default backend.</p>
+<dl class="data">
+<dt id="execute_batch_scheduler._DEFAULT_MGR">
+<code class="descclassname">execute_batch_scheduler.</code><code class="descname">_DEFAULT_MGR</code><a class="headerlink" href="#execute_batch_scheduler._DEFAULT_MGR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default workload manager</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="execute_batch_scheduler._DEFAULT_LINE_CMD_ARGS">
+<code class="descclassname">execute_batch_scheduler.</code><code class="descname">_DEFAULT_LINE_CMD_ARGS</code><a class="headerlink" href="#execute_batch_scheduler._DEFAULT_LINE_CMD_ARGS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default cell command line for default manager</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-execute_batch_scheduler.execute_magic">
+<span id="execute-batch-scheduler-execute-magic-module"></span><h2>execute_batch_scheduler.execute_magic module<a class="headerlink" href="#module-execute_batch_scheduler.execute_magic" title="Permalink to this headline">¶</a></h2>
+<p>Cell execution magics definition.</p>
+<dl class="class">
+<dt id="execute_batch_scheduler.execute_magic.ExecuteMagics">
+<em class="property">class </em><code class="descclassname">execute_batch_scheduler.execute_magic.</code><code class="descname">ExecuteMagics</code><span class="sig-paren">(</span><em>shell=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.execute_magic.ExecuteMagics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">IPython.core.magic.Magics</span></code></p>
+<p>Magics for cell execution through workload manager</p>
+<p>List of available workload managers:</p>
+<ul class="simple">
+<li><a class="reference internal" href="execute_backends.html#execute_batch_scheduler.backends.BasicMgr" title="execute_batch_scheduler.backends.BasicMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.BasicMgr</span></code></a></li>
+<li><a class="reference internal" href="execute_backends.html#execute_batch_scheduler.backends.SSHMgr" title="execute_batch_scheduler.backends.SSHMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.SSHMgr</span></code></a></li>
+<li><a class="reference internal" href="execute_backends.html#execute_batch_scheduler.backends.SlurmMgr" title="execute_batch_scheduler.backends.SlurmMgr"><code class="xref py py-class docutils literal"><span class="pre">execute_batch_scheduler.backends.SlurmMgr</span></code></a></li>
+</ul>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">cross_validation_lock</span></code></td>
+<td>A contextmanager for running a block with our cross validation lock set to True.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="57%" />
+<col width="43%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>options_table</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>shell</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_traits</span></code>(**traits)</td>
+<td>Dynamically add trait attributes to the HasTraits instance.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">arg_err</span></code>(func)</td>
+<td>Print docstring if incorrect arguments were passed</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_config_rst_doc</span></code>()</td>
+<td>Generate rST documentation for this class&#8217; config options.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_config_section</span></code>()</td>
+<td>Get the config class config section</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_get_help</span></code>([inst])</td>
+<td>Get the help string for this class in ReST format.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_get_trait_help</span></code>(trait[,&nbsp;inst])</td>
+<td>Get the help string for a single trait.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_own_trait_events</span></code>(name)</td>
+<td>Get a dict of all event handlers defined on this class, not a parent.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_own_traits</span></code>(**metadata)</td>
+<td>Get a dict of all the traitlets defined on this class, not a parent.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_print_help</span></code>([inst])</td>
+<td>Get the help string for a single trait and print it.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">class_trait_names</span></code>(**metadata)</td>
+<td>Get a list of all the names of this class&#8217; traits.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">class_traits</span></code>(**metadata)</td>
+<td>Get a <code class="docutils literal"><span class="pre">dict</span></code> of all the traits of this class.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">default_option</span></code>(fn,&nbsp;optstr)</td>
+<td>Make an entry in the options_table for fn, with value optstr</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#execute_batch_scheduler.execute_magic.ExecuteMagics.execute" title="execute_batch_scheduler.execute_magic.ExecuteMagics.execute"><code class="xref py py-obj docutils literal"><span class="pre">execute</span></code></a>(line,&nbsp;cell)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">format_latex</span></code>(strng)</td>
+<td>Format a string for latex inclusion.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">has_trait</span></code>(name)</td>
+<td>Returns True if the object has a trait with the specified name.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">hold_trait_notifications</span></code>()</td>
+<td>Context manager for bundling trait change notifications and cross validation.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">notify_change</span></code>(change)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">observe</span></code>(handler[,&nbsp;names,&nbsp;type])</td>
+<td>Setup a handler to be called when a trait changes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">on_trait_change</span></code>([handler,&nbsp;name,&nbsp;remove])</td>
+<td>DEPRECATED: Setup a handler to be called when a trait changes.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">parse_options</span></code>(arg_str,&nbsp;opt_str,&nbsp;*long_opts,&nbsp;**kw)</td>
+<td>Parse options passed to an argument string.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">section_names</span></code>()</td>
+<td>return section names as a list</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">set_trait</span></code>(name,&nbsp;value)</td>
+<td>Forcibly sets trait attribute, including read-only attributes.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">setup_instance</span></code>(*args,&nbsp;**kwargs)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_events</span></code>([name])</td>
+<td>Get a <code class="docutils literal"><span class="pre">dict</span></code> of all the event handlers of this class.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_metadata</span></code>(traitname,&nbsp;key[,&nbsp;default])</td>
+<td>Get metadata values for trait by key.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">trait_names</span></code>(**metadata)</td>
+<td>Get a list of all the names of this class&#8217; traits.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">traits</span></code>(**metadata)</td>
+<td>Get a <code class="docutils literal"><span class="pre">dict</span></code> of all the traits of this class.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">unobserve</span></code>(handler[,&nbsp;names,&nbsp;type])</td>
+<td>Remove a trait change handler.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">unobserve_all</span></code>([name])</td>
+<td>Remove trait change handlers of any type for the specified name.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">update_config</span></code>(config)</td>
+<td>Update config and load the new values</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="execute_batch_scheduler.execute_magic.ExecuteMagics.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>line</em>, <em>cell</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.execute_magic.ExecuteMagics.execute" title="Permalink to this definition">¶</a></dt>
+<dd><div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">execute</span> <span class="p">[</span><span class="o">--</span><span class="n">wlm</span> <span class="n">WLM</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">shell</span> <span class="n">SHELL</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">amgr</span> <span class="n">AMGR</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">bg</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Execute given cell content through configured workload scheduler.</p>
+<p>Keep some arguments : <code class="docutils literal"><span class="pre">--wlm</span></code>, <code class="docutils literal"><span class="pre">--shell</span></code>, <code class="docutils literal"><span class="pre">--bg</span></code> and <code class="docutils literal"><span class="pre">--amgr</span></code>.
+Other arguments are passed to workload manager backend.</p>
+<p>Get some extra command line arguments from variable that
+may be overrided in IPython profile configuration file.</p>
+<dl class="docutils">
+<dt>optional arguments:</dt>
+<dd><table class="first last docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--wlm <var>WLM</var></span></kbd></td>
+<td>Workload manager.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--shell <var>SHELL</var></span></kbd></td>
+<td>Shell to use.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--amgr <var>AMGR</var></span></kbd></td>
+<td>The variable in which to store workload manager instance. If
+the script is backgrounded, this will be used to get cell
+output/error using <cite>get_output()</cite> method.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--bg</span></kbd></td>
+<td>Whether to run the script in the background. If given, the
+only way to see the output of the command is with <cite>&#8211;amgr</cite>.</td></tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="execute_batch_scheduler.execute_magic.ExecuteMagics.magics">
+<code class="descname">magics</code><em class="property"> = {'line': {}, 'cell': {'execute': 'execute'}}</em><a class="headerlink" href="#execute_batch_scheduler.execute_magic.ExecuteMagics.magics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="execute_batch_scheduler.execute_magic.ExecuteMagics.registered">
+<code class="descname">registered</code><em class="property"> = True</em><a class="headerlink" href="#execute_batch_scheduler.execute_magic.ExecuteMagics.registered" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="execute_batch_scheduler.execute_magic.load_ipython_extension">
+<code class="descclassname">execute_batch_scheduler.execute_magic.</code><code class="descname">load_ipython_extension</code><span class="sig-paren">(</span><em>ipython</em><span class="sig-paren">)</span><a class="headerlink" href="#execute_batch_scheduler.execute_magic.load_ipython_extension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load extension.</p>
+<p>Registers the ExecuteMagics</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">execute_batch_scheduler package</a><ul>
+<li><a class="reference internal" href="#module-execute_batch_scheduler">Module contents</a></li>
+<li><a class="reference internal" href="#module-execute_batch_scheduler.execute_magic">execute_batch_scheduler.execute_magic module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">ipython-batch-scheduler-magic modules</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="execute_backends.html"
+                        title="next chapter">execute_batch_scheduler.backends module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/execute_batch_scheduler.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="execute_backends.html" title="execute_batch_scheduler.backends module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="ipython-batch-scheduler-magic modules"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >ipython-batch-scheduler-magic modules</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Jean-Matthieu Etancelin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>

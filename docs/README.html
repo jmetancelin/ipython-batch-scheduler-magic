@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Readme &#8212; ipython-batch-scheduler-magic 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ipython-batch-scheduler-magic modules" href="modules.html" />
+    <link rel="prev" title="Authors" href="include_authors.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="ipython-batch-scheduler-magic modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="include_authors.html" title="Authors"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme">
+<span id="readme"></span><h1>Readme<a class="headerlink" href="#readme" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="overview">
+<span id="overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>This package provides a IPython <a class="reference external" href="http://ipython.readthedocs.io/en/stable/interactive/magics.html">magic commands</a> to delegate cell content execution to a workload scheduler.</p>
+<p>Workload scheduler are mostly used in High Performance Computing environment to manage resources usability to users. Currently, this package supports only <a class="reference external" href="http://slurm">Slurm</a>. It exists other schedulers, that contributors should feel free to add support:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://slurm">Slurm</a> (supported)</li>
+<li>OAR</li>
+<li>PBS</li>
+<li>...</li>
+</ul>
+<p>This package is also supporting basic SSH instead of workload scheduler.</p>
+<p>This package exposes functionalities through a cell magic command : <code class="docutils literal"><span class="pre">%%execute</span></code>. Backend is provided in the <code class="docutils literal"><span class="pre">execute_batch_scheduler</span></code> Python sub-package.</p>
+</div>
+<div class="section" id="installation">
+<span id="installation"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>This package installs through Python distutils :</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<p>The default backend workload scheduler may be configured on install. Example for slurm:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">workloadmanager</span><span class="o">=</span><span class="n">slurm</span>
+</pre></div>
+</div>
+<p>Default command line arguments may also be configured on install. Example for setting a specific slurm QOS:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">workloadmanager</span><span class="o">=</span><span class="n">slurm</span> <span class="o">--</span><span class="n">workloadmanagercmdargs</span><span class="o">=--</span><span class="n">quos</span><span class="o">=</span><span class="n">ipythoncell</span>
+</pre></div>
+</div>
+<p>Example for setting a specific slurm QOS and a host for ssh:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span> <span class="o">--</span><span class="n">workloadmanagercmdargs</span><span class="o">=</span><span class="s1">&#39;{&quot;slurm&quot;: &quot;--quos=ipythoncell&quot;, &quot;ssh&quot;: &quot;--host=amachine&quot;}&#39;</span>
+</pre></div>
+</div>
+<p>The magic command is then activated as an IPython extension:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="o">%</span><span class="n">load_ext</span> <span class="n">execute_batch_scheduler</span><span class="o">.</span><span class="n">execute_magic</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage-example">
+<span id="usage-example"></span><h2>Usage example<a class="headerlink" href="#usage-example" title="Permalink to this headline">¶</a></h2>
+<p>A single entry point is the <code class="docutils literal"><span class="pre">%%execute</span></code> magic:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>In [2]: %%execute -n8 -N4
+srun -n 8 hostname
+...:
+Submitted batch job 957969
+Running .
+End batch job 957969 Status:  COMPLETED
+
+romeo137
+romeo137
+romeo138
+romeo138
+romeo139
+romeo139
+romeo140
+romeo140
+</pre></div>
+</div>
+<p>Command line arguments (<code class="docutils literal"><span class="pre">-n8</span> <span class="pre">-N4</span></code> in the example above) are passed to the workload manager submission command, <code class="docutils literal"><span class="pre">salloc</span></code> here for Slurm. Some command line arguments are reserved, and intercepted, by the magic command. See below</p>
+<div class="section" id="common-arguments">
+<span id="common-arguments"></span><h3>Common arguments:<a class="headerlink" href="#common-arguments" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--wlm=&lt;backend&gt;</span></code> : select the backend workload manager (currently available: <code class="docutils literal"><span class="pre">ssh</span></code>, <code class="docutils literal"><span class="pre">slurm</span></code>). Default value is set at install.</li>
+<li><code class="docutils literal"><span class="pre">--shell=&lt;SHELL&gt;</span></code> : shell to use as a script shebang <code class="docutils literal"><span class="pre">!#SHELL</span></code>. Default value is <code class="docutils literal"><span class="pre">/bin/bash</span></code></li>
+<li><code class="docutils literal"><span class="pre">--bg</span></code> : run the cell content in background. No output will be printed for this cell.</li>
+<li><code class="docutils literal"><span class="pre">--amgr=&lt;VAR&gt;</span></code> : variable in user namespace to store backend object. Only way to get cell output when used with <code class="docutils literal"><span class="pre">--bg</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="ssh-example">
+<span id="ssh-example"></span><h3>SSH example<a class="headerlink" href="#ssh-example" title="Permalink to this headline">¶</a></h3>
+<p>SSH backend is not a workload manager but simply use ssh to reach executing resources. The ssh is not taking any standard input from user so it must connect without password or passphrase.</p>
+<p>Specific arguments:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">--host</span></code> : host to reach with ssh</li>
+</ul>
+<div class="highlight-text"><div class="highlight"><pre><span></span>In [3]: %%execute --workloadmanager=ssh --host=adistantmachine
+echo &quot;Hello from $(hostname)&quot;
+...:
+SSH started with pid: 10315
+Running .
+Done
+Hello from adistantmachine
+</pre></div>
+</div>
+</div>
+<div class="section" id="slurm-example">
+<span id="slurm-example"></span><h3>Slurm example<a class="headerlink" href="#slurm-example" title="Permalink to this headline">¶</a></h3>
+<p>Slurm backend to run cell content as slurm jobs. All parameters are passed to <code class="docutils literal"><span class="pre">sbatch</span></code> command.</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>In [4]: %%execute -n8 -N1 --reservation=rsv --time=00:42:00
+echo $SLURM_JOB_ID
+srun -n 8 hostname
+...:
+Submitted batch job 957970
+Running .
+End batch job 957970 Status:  COMPLETED
+
+957970
+romeo141
+romeo141
+romeo141
+romeo141
+romeo141
+romeo141
+romeo141
+romeo141
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="overriding-installed-configuration">
+<span id="overriding-installed-configuration"></span><h2>Overriding installed configuration<a class="headerlink" href="#overriding-installed-configuration" title="Permalink to this headline">¶</a></h2>
+<p>A IPython profile specific configuration may be wanted for &#8216;on-the-fly&#8217; generated profiles (associated to a specific usage). This configuration would override install parameters. To do so, inserts this kind of line in the <code class="docutils literal"><span class="pre">ipython_config.py</span></code> file of the profile:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">c</span><span class="o">.</span><span class="n">InteractiveShellApp</span><span class="o">.</span><span class="n">exec_lines</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;import execute_cell; execute_cell._DEFAULT_LINE_CMD_ARGS=&quot;--host=amachine&quot;; execute_cell._DEFAULT_MGR=&quot;ssh&quot;&#39;</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Readme</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage-example">Usage example</a><ul>
+<li><a class="reference internal" href="#common-arguments">Common arguments:</a></li>
+<li><a class="reference internal" href="#ssh-example">SSH example</a></li>
+<li><a class="reference internal" href="#slurm-example">Slurm example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#overriding-installed-configuration">Overriding installed configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="include_authors.html"
+                        title="previous chapter">Authors</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">ipython-batch-scheduler-magic modules</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/README.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="ipython-batch-scheduler-magic modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="include_authors.html" title="Authors"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">ipython-batch-scheduler-magic 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Jean-Matthieu Etancelin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
+    </div>
+  </body>
+</html>
