@@ -37,7 +37,7 @@ class BaseMgr(object, metaclass=ABCMeta):
     _wlbin = None
 
     @abstractmethod
-    def __init__(self, args, shell):
+    def __init__(self, args, shell, userns):
         """Initialize the workload manager interface.
 
         Derived class should instanciate a :py:class:`subprocess.Popen` object to interact with.
@@ -48,6 +48,8 @@ class BaseMgr(object, metaclass=ABCMeta):
             String containing workload scheduler specific arguments.
         shell : str
             Shell to use whithin the workload scheduler
+        userns : dict
+            User namespace from cell_magics
 
         """
         self._waiting_steps = 0
@@ -55,6 +57,7 @@ class BaseMgr(object, metaclass=ABCMeta):
         self.shebang = ("#!{0} \n".format(shell)).encode('utf8', 'replace')
         # Cell output
         self.out, self.err = None, None
+        self._userns = userns
 
     @abstractmethod
     def submit(self, content):
@@ -158,9 +161,9 @@ class BasicMgr(BaseMgr):
 
     _wlbin = ['bash', ]
 
-    def __init__(self, args, shell):
+    def __init__(self, args, shell, userns):
         """Initialize the default manager"""
-        super(BasicMgr, self).__init__(args, shell)
+        super(BasicMgr, self).__init__(args, shell, userns)
         self.cmd = self._wlbin + args
 
         # Build Popen instance
@@ -215,7 +218,7 @@ class SSHMgr(BaseMgr):
 
     _wlbin = ['ssh', '-n']
 
-    def __init__(self, args, shell):
+    def __init__(self, args, shell, userns):
         """Initialize the workload manager interface for SSH.
 
         It rely on ``ssh -n`` so ssh must connect without any password
@@ -227,11 +230,15 @@ class SSHMgr(BaseMgr):
             String containing workload scheduler specific arguments.
         shell : str
             Shell to use whithin the workload scheduler
+        userns : dict
+            User namespace from cell_magics
         """
-        super(SSHMgr, self).__init__(args, shell)
+        super(SSHMgr, self).__init__(args, shell, userns)
         parser = MagicArgumentParser()
         parser.add_argument('--host', type=str, default='localhost',
                             help='Machine to reach (default = localhost)')
+        parser.add_argument('--pid', type=int,
+                            help='Variable to store SSH process pid')
         _args, cmd = parser.parse_known_args(args)
         self.cmd = self._wlbin + [_args.host, ] + cmd
         # SSH Cannot fork into background without a command to execute.
@@ -262,6 +269,8 @@ class SSHMgr(BaseMgr):
             self._is_terminated = True
         # SSH output is bind to Popen command output
         if self.p.poll() is None:
+            if _args.pid:
+                self._userns[_args.pid] = self.p.pid
             return ("SSH started with pid: {0}\n".format(self.p.pid), '')
         else:
             self._is_terminated = True
@@ -324,7 +333,7 @@ class SlurmMgr(BaseMgr):
               '--output=' + _outerr_files + '.out',
               '--error=' + _outerr_files + '.err']
 
-    def __init__(self, args, shell):
+    def __init__(self, args, shell, userns):
         """Initialize the slurm submission.
 
         The ``sbatch`` command is achieved through a :py:class:`subprocess.Popen` object
@@ -335,11 +344,18 @@ class SlurmMgr(BaseMgr):
             String containing workload scheduler specific arguments.
         shell : str
             Shell to use whithin the workload scheduler
+        userns : dict
+            User namespace from cell_magics
         """
-        super(SlurmMgr, self).__init__(args, shell)
-        self.cmd = self._wlbin + args
+        super(SlurmMgr, self).__init__(args, shell, userns)
+        parser = MagicArgumentParser()
+        parser.add_argument('--jobid', type=int,
+                            help='Variable to store Slurm Job Id')
+        _args, cmd = parser.parse_known_args(args)
+        self.cmd = self._wlbin + cmd
         self._is_started = False
         self._is_terminated = False
+        self._args_jobid = _args.jobid
 
         # Build Popen instance
         try:
@@ -386,6 +402,8 @@ class SlurmMgr(BaseMgr):
         if out.find("Submitted batch job") == 0:
             self._jobid = int(out.split(' ')[-1])
             self._is_started = True
+            if self._args_jobid:
+                self._userns[self._args_jobid] = self._jobid
         else:
             sys.stderr.write("Error during job submission\n")
             self._is_terminated = True
