@@ -349,7 +349,7 @@ class SlurmMgr(BaseMgr):
         """
         super(SlurmMgr, self).__init__(args, shell, userns)
         parser = MagicArgumentParser()
-        parser.add_argument('--jobid', type=int,
+        parser.add_argument('--jobid', type=str,
                             help='Variable to store Slurm Job Id')
         _args, cmd = parser.parse_known_args(args)
         self.cmd = self._wlbin + cmd
