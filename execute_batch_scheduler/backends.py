@@ -345,6 +345,13 @@ class SlurmMgr(BaseMgr):
             User namespace from cell_magics
         """
         super(SlurmMgr, self).__init__(args, shell, userns)
+
+        from . import _DEFAULT_SLURM_OUTERR_FILE
+        if _DEFAULT_SLURM_OUTERR_FILE is None:
+            self._outerr_files = os.path.join(os.environ['HOME'], "python-execute-slurm.%J")
+        else:
+            self._outerr_files = _DEFAULT_SLURM_OUTERR_FILE
+
         parser = MagicArgumentParser()
         parser.add_argument('--jobid', type=str,
                             help='Variable to store Slurm Job Id')
@@ -355,12 +362,6 @@ class SlurmMgr(BaseMgr):
         self._is_started = False
         self._is_terminated = False
         self._args_jobid = _args.jobid
-
-        from . import _DEFAULT_SLURM_OUTERR_FILE
-        if _DEFAULT_SLURM_OUTERR_FILE is None:
-            self._outerr_files = os.path.join(os.environ['HOME'], "python-execute-slurm.%J")
-        else:
-            self._outerr_files = _DEFAULT_SLURM_OUTERR_FILE
 
         # Build Popen instance
         try:
