@@ -237,7 +237,7 @@ class SSHMgr(BaseMgr):
         parser = MagicArgumentParser()
         parser.add_argument('--host', type=str, default='localhost',
                             help='Machine to reach (default = localhost)')
-        parser.add_argument('--pid', type=int,
+        parser.add_argument('--pid', type=str,
                             help='Variable to store SSH process pid')
         _args, cmd = parser.parse_known_args(args)
         self.cmd = self._wlbin + [_args.host, ] + cmd
@@ -324,14 +324,11 @@ class SlurmMgr(BaseMgr):
 
     """
 
-    _outerr_files = os.path.join(os.environ['HOME'], "python-execute-slurm.%J")
+    _wlbin = ['sbatch', '-n', '1', ]
     _end_states = ('CANCELLED', 'COMPLETED', 'FAILED',
                    'NODE_FAIL', 'PREEMPTED', 'TIMEOUT')
     _wait_states = ('CONFIGURING', 'PENDING')
     _run_states = ('COMPLETING', 'RUNNING', 'SUSPENDED')
-    _wlbin = ['sbatch', '-n', '1',
-              '--output=' + _outerr_files + '.out',
-              '--error=' + _outerr_files + '.err']
 
     def __init__(self, args, shell, userns):
         """Initialize the slurm submission.
@@ -352,10 +349,18 @@ class SlurmMgr(BaseMgr):
         parser.add_argument('--jobid', type=str,
                             help='Variable to store Slurm Job Id')
         _args, cmd = parser.parse_known_args(args)
-        self.cmd = self._wlbin + cmd
+        self.cmd = self._wlbin + cmd + [
+            '--output=' + self._outerr_files + '.out',
+            '--error=' + self._outerr_files + '.err']
         self._is_started = False
         self._is_terminated = False
         self._args_jobid = _args.jobid
+
+        from . import _DEFAULT_SLURM_OUTERR_FILE
+        if _DEFAULT_SLURM_OUTERR_FILE is None:
+            self._outerr_files = os.path.join(os.environ['HOME'], "python-execute-slurm.%J")
+        else:
+            self._outerr_files = _DEFAULT_SLURM_OUTERR_FILE
 
         # Build Popen instance
         try:

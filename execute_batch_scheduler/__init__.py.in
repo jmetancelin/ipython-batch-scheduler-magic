@@ -8,3 +8,6 @@ _DEFAULT_MGR = {default_manager}
 
 #: Default cell command line for default manager
 _DEFAULT_LINE_CMD_ARGS = {default_cmd_args}
+
+#: Default slurm output files
+_DEFAULT_SLURM_OUTERR_FILE = None
