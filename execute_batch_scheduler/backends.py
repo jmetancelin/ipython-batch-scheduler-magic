@@ -412,6 +412,7 @@ class SlurmMgr(BaseMgr):
                 self._userns[self._args_jobid] = self._jobid
         else:
             sys.stderr.write("Error during job submission\n")
+            sys.stderr.write("Submission arguments : {0}\n".format(' '.join(self.cmd)))
             self._is_terminated = True
         return (out, err)
 
