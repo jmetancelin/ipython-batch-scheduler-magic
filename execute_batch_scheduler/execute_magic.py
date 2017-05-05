@@ -70,7 +70,7 @@ class ExecuteMagics(Magics):
                 extra_cmd = arg_split(_DEFAULT_LINE_CMD_ARGS)
         # Build workload manager instance
         job_mgr = self._wlmgr[args.wlm](
-            cmd + extra_cmd, args.shell, userns=self.shell.user_ns)
+            extra_cmd + cmd, args.shell, userns=self.shell.user_ns)
         # Submit the cell as job script
         sub_out, sub_err = job_mgr.submit(cell)
         sys.stdout.write(sub_out)
