@@ -351,6 +351,9 @@ class SlurmMgr(BaseMgr):
             self._outerr_files = os.path.join(os.environ['HOME'], "python-execute-slurm.%J")
         else:
             self._outerr_files = _DEFAULT_SLURM_OUTERR_FILE
+        _outerr_pardir = os.path.abspath(os.path.join(self._outerr_files, os.pardir))
+        if not os.path.exists(_outerr_pardir):
+            os.makedirs(_outerr_pardir)
 
         parser = MagicArgumentParser()
         parser.add_argument('--jobid', type=str,
@@ -459,6 +462,7 @@ class SlurmMgr(BaseMgr):
                     sys.stdout.write("\n")
                 sys.stdout.write("End batch job {0} Status: {1}\n".format(
                     self._jobid, jobstate))
+                sys.stdout.write("Slurm command was : " + " ".join(self.cmd) + "\n")
                 sys.stdout.flush()
 
     def get_output(self):
@@ -474,9 +478,6 @@ class SlurmMgr(BaseMgr):
             Job standard errput read from slurm error file.
         """
         if self._is_started and self._is_terminated:
-            if self._get_job_state().find('COMPLETED') < 0:
-                sys.stderr.write("Slurm command was : " + " ".join(self.cmd) + "\n")
-                sys.stderr.flush()
             job_f = self._outerr_files.replace('%J', str(self._jobid))
             job_out_f = job_f + '.out'
             job_err_f = job_f + '.err'
