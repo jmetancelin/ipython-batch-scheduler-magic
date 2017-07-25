@@ -22,9 +22,10 @@ from subprocess import (Popen, PIPE, check_output, check_call)
 from abc import ABCMeta, abstractmethod
 from IPython.utils import py3compat
 from IPython.core.magic_arguments import MagicArgumentParser
+from six import with_metaclass
 
 
-class BaseMgr(object, metaclass=ABCMeta):
+class BaseMgr(with_metaclass(ABCMeta, object)):
     """Abstract base class for description of workload manager interface.
 
     Any derived class must implement the init function, how to submit
